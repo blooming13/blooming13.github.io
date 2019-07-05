@@ -37,5 +37,6 @@ $ hexo deploy
 
 More info: [Deployment](https://hexo.io/docs/deployment.html)
 
-![12](.\hello-world\ban6666.jpg)
+![这是一个测试](.\ban6666.jpg)
 
+![这是一个测试1](https://upload-images.jianshu.io/upload_images/1864475-ea777a9585853764.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/667/format/webp)
