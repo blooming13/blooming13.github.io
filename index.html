@@ -229,6 +229,156 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blooming13.github.io/2019/07/29/Schur补方法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lin Hao">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lin Hao 的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/29/Schur补方法/" itemprop="url">Schur补方法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-29T20:27:22+08:00">
+                2019-07-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>一、</strong> <strong>介绍</strong>：</p>
+<p>​        在数值分析中，以Issai Schur 命名的Schur 补方法是非重叠域分解方法的基本<br>和最早版本，也被称为迭代子结构。将有限元问题被分成不重叠的子域，并且内部<br>子域边界的未知量被消除。</p>
+<p><strong>二、</strong> <strong>方法和实现:</strong></p>
+<p>​       假设我们想要求解泊松方程</p>
+<script type="math/tex; mode=display">
+-\Delta u=f, \quad\left.u\right|_{\partial \Omega}=0
+, \quad in \ \Omega</script><p>当我们离散这个问题，我们得到一个n维线性系统$AU=F$。Schur补方法将线性系统分解为子问题。我们将$\Omega$分成两个亚结构域$\Omega_{1},\Omega_{2}$，并且共享一个接口Γ。$U_{1}, U_{2}$和$U_{\Gamma}$是每个子域和与接口相关联的自由度。然后我们可以将线性系统写成</p>
+<script type="math/tex; mode=display">
+\left[\begin{array}{ccc}{A_{11}} & {0} & {A_{1 \Gamma}} \\ {0} & {A_{22}} & {A_{2 \Gamma}} \\ {A_{\Gamma 1}} & {A_{\Gamma 2}} & {A_{\Gamma \Gamma}}\end{array}\right]\left[\begin{array}{l}{U_{1}} \\ {U_{2}} \\ {U_{\Gamma}}\end{array}\right]=\left[\begin{array}{l}{F_{1}} \\ {F_{2}} \\ {F_{\Gamma}}\end{array}\right]</script><p>其中$F_{1}, F_{2}$ 和 $F_{\Gamma}$是在每个区域中的负载向量的分量。<br>做初等变换：</p>
+<script type="math/tex; mode=display">
+\left[\begin{array}{ccc}{A_{11}} & {0} & {A_{1 \Gamma}} \\ {0} & {A_{22}} & {A_{2 \Gamma}} \\ {A_{\Gamma 1}} & {A_{\Gamma 2}} & {A_{\Gamma \Gamma}}\end{array}\right]
+\longrightarrow
+\left[\begin{array}{ccc}{A_{11}} & {0} & {A_{1 \Gamma}} \\ {0} & {A_{22}} & {A_{2 \Gamma}} \\ {0} & {A_{\Gamma 2}} & {A_{\Gamma \Gamma}-A_{\Gamma 1} A_{11}^{-1} A_{1 \Gamma}}\end{array}\right]</script><script type="math/tex; mode=display">
+\longrightarrow
+\left[\begin{array}{ccc}{A_{11}} & {0} & {A_{1 \Gamma}} \\ {0} & {A_{22}} & {A_{2 \Gamma}} \\ {0} & {0} & {A_{\Gamma \Gamma}-A_{\Gamma 1} A_{11}^{-1} A_{1 \Gamma}-A_{\Gamma 2} A_{22}^{-1} A_{2 \Gamma}}\end{array}\right]</script><p>同时，对右端有：</p>
+<script type="math/tex; mode=display">
+\left[\begin{array}{l}{F_{1}} \\ {F_{2}} \\ {F_{\Gamma}}\end{array}\right]
+\longrightarrow
+\left[\begin{array}{ccc}{F_{1}} \\ {F_{2}} \\ {F_{\Gamma}-A_{\Gamma 1} A_{11}^{-1} F_{1}-A_{\Gamma 2} A_{22}^{-1} F_{2}}\end{array}\right]</script><p>即：</p>
+<script type="math/tex; mode=display">
+\left[\begin{array}{ccc}{A_{11}} & {0} & {A_{1 \Gamma}} \\ {0} & {A_{22}} & {A_{2 \Gamma}} \\ {0} & {0} & {A_{\Gamma \Gamma}-A_{\Gamma 1} A_{11}^{-1} A_{1 \Gamma}-A_{\Gamma 2} A_{22}^{-1} A_{2 \Gamma}}\end{array}\right]
+\left[\begin{array}{l}{U_{1}} \\ {U_{2}} \\ {U_{\Gamma}}\end{array}\right]=
+\left[\begin{array}{ccc}{F_{1}} \\ {F_{2}} \\ {F_{\Gamma}-A_{\Gamma 1} A_{11}^{-1} F_{1}-A_{\Gamma 2} A_{22}^{-1} F_{2}}\end{array}\right]</script><p>Schur补方法可以通过求解较小的系统在边界上的值来进行</p>
+<script type="math/tex; mode=display">
+\Sigma U_{\Gamma}=F_{\Gamma}-A_{\Gamma 1} A_{11}^{-1} F_{1}-A_{\Gamma 2} A_{22}^{-1} F_{2}</script><p>对接口$U_{\Gamma}$，我们定义舒尔补矩阵</p>
+<script type="math/tex; mode=display">
+\Sigma=A_{\Gamma \Gamma}-A_{\Gamma 1} A_{11}^{-1} A_{1 \Gamma}-A_{\Gamma 2} A_{22}^{-1} A_{2 \Gamma}</script><p>需要注意的一点是，计算 ${\ A_ {11} ^ { - 1}} A _ 11 ^ -1$ 和 ${\ A_ {22} ^ { - 1}} A _ 22 ^ -1$就是解决每个域上的解耦Dirichlet问题，这些问题可以并行完成。因此，我们不需要明确地存储Schur补矩阵，只需知道如何将矢量乘以它就足够了。<br>一旦我们知道子域边界上的值，我们就可以使用这两个关系找到子域内部值</p>
+<script type="math/tex; mode=display">
+A_{11} U_{1}=F_{1}-A_{1 \Gamma} U_{\Gamma}, \quad A_{22} U_{2}=F_{2}-A_{2 \Gamma} U_{\Gamma}</script><p>这两者都可以并行完成。</p>
+<p><strong>三、</strong> <strong>优点:</strong></p>
+<p>​       这种方法有两个个好处：<br>1、消除内部未知数，即Dirichlet问题可分解为内部子问题，减小了单次运算时的时间空间复杂度，且可以并行完成。<br>2、减少了条件数和迭代次数。对于二阶问题，例如拉普拉斯方程或线性弹性问题，系统的矩阵具有$1/h^{2}$阶的条件数，其中h是特征元素大小。然而，Schur补方法的条件数仅为$1/h$。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://blooming13.github.io/2019/07/01/hello-world/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -581,7 +731,7 @@ e=\left(e_{1}, \cdots, e_{n-1}\right)^{T} \in R^{n-1}</script><p>，其中  $ e_
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -594,7 +744,7 @@ e=\left(e_{1}, \cdots, e_{n-1}\right)^{T} \in R^{n-1}</script><p>，其中  $ e_
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
