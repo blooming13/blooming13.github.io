@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="一、 介绍： ​        在数值分析中，以Issai Schur 命名的Schur 补方法是非重叠域分解方法的基本和最早版本，也被称为迭代子结构。将有限元问题被分成不重叠的子域，并且内部子域边界的未知量被消除。">
+<meta name="description" content="一、 介绍：​        在数值分析中，以Issai Schur 命名的Schur 补方法是非重叠域分解方法的基本和最早版本，也被称为迭代子结构。将有限元问题被分成不重叠的子域，并且内部子域边界的未知量被消除。">
 <meta name="keywords" content="Schur补方法 Markdown">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Schur补方法">
 <meta property="og:url" content="https://blooming13.github.io/2019/07/29/Schur补方法/index.html">
 <meta property="og:site_name" content="Lin Hao 的个人博客">
-<meta property="og:description" content="一、 介绍： ​        在数值分析中，以Issai Schur 命名的Schur 补方法是非重叠域分解方法的基本和最早版本，也被称为迭代子结构。将有限元问题被分成不重叠的子域，并且内部子域边界的未知量被消除。">
+<meta property="og:description" content="一、 介绍：​        在数值分析中，以Issai Schur 命名的Schur 补方法是非重叠域分解方法的基本和最早版本，也被称为迭代子结构。将有限元问题被分成不重叠的子域，并且内部子域边界的未知量被消除。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-09-04T06:33:00.635Z">
+<meta property="og:updated_time" content="2019-09-05T06:51:53.433Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Schur补方法">
-<meta name="twitter:description" content="一、 介绍： ​        在数值分析中，以Issai Schur 命名的Schur 补方法是非重叠域分解方法的基本和最早版本，也被称为迭代子结构。将有限元问题被分成不重叠的子域，并且内部子域边界的未知量被消除。">
+<meta name="twitter:description" content="一、 介绍：​        在数值分析中，以Issai Schur 命名的Schur 补方法是非重叠域分解方法的基本和最早版本，也被称为迭代子结构。将有限元问题被分成不重叠的子域，并且内部子域边界的未知量被消除。">
 
 
 
@@ -300,11 +300,9 @@
       
 
       
-        <p><strong>一、</strong> <strong>介绍</strong>：</p>
-<p>​        在数值分析中，以Issai Schur 命名的Schur 补方法是非重叠域分解方法的基本和最早版本，也被称为迭代子结构。将有限元问题被分成不重叠的子域，并且内部子域边界的未知量被消除。</p>
+        <h4 id="一、-介绍："><a href="#一、-介绍：" class="headerlink" title="一、 介绍："></a><strong>一、</strong> <strong>介绍</strong>：</h4><p>​        在数值分析中，以Issai Schur 命名的Schur 补方法是非重叠域分解方法的基本和最早版本，也被称为迭代子结构。将有限元问题被分成不重叠的子域，并且内部子域边界的未知量被消除。</p>
 <a id="more"></a>
-<p><strong>二、</strong> <strong>方法和实现:</strong></p>
-<p>​       假设我们想要求解泊松方程</p>
+<h4 id="二、-方法和实现"><a href="#二、-方法和实现" class="headerlink" title="二、 方法和实现:"></a><strong>二、</strong> <strong>方法和实现:</strong></h4><p>​       假设我们想要求解泊松方程</p>
 <script type="math/tex; mode=display">
 -\Delta u=f, \quad\left.u\right|_{\partial \Omega}=0
 , \quad in \ \Omega</script><p>当我们离散这个问题，我们得到一个n维线性系统$AU=F$。Schur补方法将线性系统分解为子问题。我们将$\Omega$分成两个亚结构域$\Omega_{1},\Omega_{2}$，并且共享一个接口Γ。$U_{1}, U_{2}$和$U_{\Gamma}$是每个子域和与接口相关联的自由度。然后我们可以将线性系统写成</p>
@@ -330,8 +328,7 @@
 \Sigma=A_{\Gamma \Gamma}-A_{\Gamma 1} A_{11}^{-1} A_{1 \Gamma}-A_{\Gamma 2} A_{22}^{-1} A_{2 \Gamma}</script><p>需要注意的一点是，计算 ${\ A_ {11} ^ { - 1}} A _ 11 ^ -1$ 和 ${\ A_ {22} ^ { - 1}} A _ 22 ^ -1$就是解决每个域上的解耦Dirichlet问题，这些问题可以并行完成。因此，我们不需要明确地存储Schur补矩阵，只需知道如何将矢量乘以它就足够了。<br>一旦我们知道子域边界上的值，我们就可以使用这两个关系找到子域内部值</p>
 <script type="math/tex; mode=display">
 A_{11} U_{1}=F_{1}-A_{1 \Gamma} U_{\Gamma}, \quad A_{22} U_{2}=F_{2}-A_{2 \Gamma} U_{\Gamma}</script><p>这两者都可以并行完成。</p>
-<p><strong>三、</strong> <strong>优点:</strong></p>
-<p>​       这种方法有两个个好处：<br>1、消除内部未知数，即Dirichlet问题可分解为内部子问题，减小了单次运算时的时间空间复杂度，且可以并行完成。<br>2、减少了条件数和迭代次数。对于二阶问题，例如拉普拉斯方程或线性弹性问题，系统的矩阵具有$1/h^{2}$阶的条件数，其中h是特征元素大小。然而，Schur补方法的条件数仅为$1/h$。</p>
+<h4 id="三、-优点"><a href="#三、-优点" class="headerlink" title="三、 优点:"></a><strong>三、</strong> <strong>优点:</strong></h4><p>​       这种方法有两个个好处：<br>1、消除内部未知数，即Dirichlet问题可分解为内部子问题，减小了单次运算时的时间空间复杂度，且可以并行完成。<br>2、减少了条件数和迭代次数。对于二阶问题，例如拉普拉斯方程或线性弹性问题，系统的矩阵具有$1/h^{2}$阶的条件数，其中h是特征元素大小。然而，Schur补方法的条件数仅为$1/h$。</p>
 
       
     </div>
@@ -426,8 +423,17 @@ A_{11} U_{1}=F_{1}-A_{1 \Gamma} U_{\Gamma}, \quad A_{22} U_{2}=F_{2}-A_{2 \Gamma
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -478,6 +484,22 @@ A_{11} U_{1}=F_{1}-A_{1 \Gamma} U_{\Gamma}, \quad A_{22} U_{2}=F_{2}-A_{2 \Gamma
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#一、-介绍："><span class="nav-number">1.</span> <span class="nav-text">一、 介绍：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二、-方法和实现"><span class="nav-number">2.</span> <span class="nav-text">二、 方法和实现:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#三、-优点"><span class="nav-number">3.</span> <span class="nav-text">三、 优点:</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
